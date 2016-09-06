@@ -78,7 +78,7 @@ public class UserDaoImpl implements UserDao{
        // sdf.format((Date)os[5])
         if(null!=list&&list.size()>0){
         	for(Object[] os:list){
-				o = new OaUser((Integer)os[0], String.valueOf(os[1]), String.valueOf(os[2]),1==(Integer)os[3]?"是":"否", 1==(Integer)os[4]?"正常":"异常",String.valueOf(os[5]));
+				o = new OaUser((Integer)os[0], String.valueOf(os[1]), String.valueOf(os[2]),1==(Integer)os[3]?"是":"否", 1==(Integer)os[4]?"正常":"异常",String.valueOf(os[5]), String.valueOf(os[6]));
 				userList.add(o);
 				System.out.println(o);
 			}
@@ -112,5 +112,10 @@ public class UserDaoImpl implements UserDao{
 		}
 		return true;
 		
+	}
+
+	public Page<OaUser> searchstaff(String[] sta, int pageNo, int pageSize) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }
