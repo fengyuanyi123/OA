@@ -52,7 +52,6 @@ request.setAttribute("basePath",basePath);
 	</style>
 	<script type="text/javascript">
 		function sub(sname){
-			alert(sname);
 			$.post('Passwordmodification.do',{
 				methodName:'psswordModifiCation',				
 				userName:sname,
