@@ -21,6 +21,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>easyui/themes/icon.css">
 	<script type="text/javascript" src="<%=basePath%>easyui/jquery.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>easyui/jquery.easyui.min.js"></script>
+	<style type="text/css">
+		.nr{
+			position: absolute;
+			left:1300px;
+			top:60px;
+			font-size: 20px;
+			font-weight: bold;
+		}
+		
+	</style>
 	<script type="text/javascript">
 		function addTab(title,url){
 			$('#tab').tabs('add',{
@@ -31,13 +41,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 			
 		}
+		
 	</script>
 
   </head>
   
   <body class="easyui-layout">   
-    <div data-options="region:'north',title:'North Title',split:true" style="height:100px;">
-    	<p>欢迎你，${loginUser.userName}</p>
+    <div data-options="region:'north',title:'North Title',split:true" style="height:120px; background-image: url('view/images/beijing.png');" id="tp" >
+        <div><img src="view/images/oa.jpg"></div>
+    	<div class="nr"><p>欢迎你，${loginUser.userName}</p></div>
     </div>   
 	<div data-options="region:'west',title:'系统界面',split:true" style="width:200px;">
 		<div id="aa" class="easyui-accordion" data-options="fit:true">   

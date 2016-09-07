@@ -76,7 +76,7 @@ public class MainServlet extends HttpServlet{
 		//2、查询数据库
 		System.out.print("LoginServlet控制层==>");
 		User user = userModel.loadUserByName(userName);
-		System.out.println(user);
+		
 		//利用上面的查询判断，并给出不同提示
 		if(null != user){
 			System.out.println("账号正确");
@@ -135,49 +135,55 @@ public class MainServlet extends HttpServlet{
 	}
 	
 	
-//	public void updateEmployeePwd(HttpServletRequest req, HttpServletResponse resp)
-//			throws ServletException, IOException {
-//		//设置字符编码
-//		req.setCharacterEncoding("utf-8");
-//		//取出提交的信息
-//		String userName=req.getParameter("userName");
-//		String Oldpassword=req.getParameter("Oldpassword");
-//		String Newpassword=req.getParameter("Newpassword");
-//		String Newpword=req.getParameter("Newpword");
-//		//修改结果
-//		int result=0;
-//		//b为true旧密码正确，否则错误
-//		boolean b=userModel.selectstaffNewpassword(userName,Oldpassword);
-//		if(b){
-//			//旧密码正确，判断两次输入的密码是否相同
-//			if(null!=newPwd&&null!=newPwdSure&&newPwd.equals(newPwdSure)){
-//				//旧密码改成新密码
-//				staff emp=userModel.changEmployeePwd(userName,Oldpassword);
-//				//返回的数据与newPwd相等，则修改成功
-//				if(newPwd.equals(emp.getEmpPwd())){
-//					//密码修改成功
-//					result=3;
-//					
-//				}else{
-//					//修改失败
-//					result=2;
-//				}
-//			}else{
-//				//两次输入的新密码不相同
-//				result=1;
-//				
-//			}
-//		}else{
-//			//输入的旧密码错误
-//			result=0;
-//		}
-//		
-//		resp.setCharacterEncoding("utf-8");
-//		resp.setContentType("text/html;charset=utf-8");  
-//		resp.getWriter().write(result+"");
-//		resp.getWriter().flush();
-//		
-//	}
+	public void psswordModifiCation(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		//设置字符编码
+		req.setCharacterEncoding("utf-8");
+		//取出提交的信息
+		String userName=req.getParameter("userName");//账号
+		String Oldpassword=req.getParameter("Oldpassword");//旧密码
+		String Newpassword=req.getParameter("Newpassword");//新密码
+		String Newpword=req.getParameter("Newpword");//确认密码
+		System.out.println("修改密码");
+		System.out.println(userName);
+		System.out.println("新密码"+Newpassword+"旧密码"+Oldpassword);
+		//修改结果
+		int result=0;
+		//b为true旧密码正确，否则错误
+		boolean b=userModel.selectstaffNewpassword(userName,Oldpassword);
+		
+		if(b){
+			//旧密码正确，判断两次输入的密码是否相同
+			if(null!=Newpassword&&null!=Newpword&&Newpassword.equals(Newpword)){
+				//旧密码改成新密码
+				User user=userModel.ModifyStaff(userName,Newpassword);
+				System.out.println("新密码"+user.getUserPass());
+				//返回的数据与Newpassword相等，则修改成功
+				if(Newpassword.equals(user.getUserPass())){
+					//密码修改成功
+					result=3;
+					
+				}else{
+					//修改失败
+					result=2;
+				}
+			}else{
+				//两次输入的新密码不相同
+				result=1;
+				
+			}
+		}else{
+			//输入的旧密码错误
+			result=0;
+		}	
+		System.out.println(result);
+		
+		resp.setCharacterEncoding("utf-8");
+		resp.setContentType("text/html;charset=utf-8");  
+		resp.getWriter().write(result+"");
+		resp.getWriter().flush();
+		
+	}
 	
 }
 

@@ -7,6 +7,7 @@ import java.util.List;
 
 
 
+
 import com.web.dao.UserDao;
 import com.web.entity.Menu;
 import com.web.entity.User;
@@ -103,11 +104,11 @@ public class UserDaoImpl implements UserDao{
 	 * @param Oldpassword
 	 * @return
 	 */
-	public boolean selectstaffNewpassword(String userName,String Oldpassword){
+	public User ModifyStaff(String userName,String Newpassword){
 		//修改旧密码
 		String sql="update staff set userPass=? where userName=?";
 		//修改密码
-		DBUtil.executeDML(sql, new Object[]{userName,Oldpassword});
+		DBUtil.executeDML(sql, new Object[]{Newpassword,userName});
 		//查询旧密码SQL语句
 		sql="select *from staff where userName=?";
 		//查询数据库获取结果集
@@ -118,9 +119,30 @@ public class UserDaoImpl implements UserDao{
 		for(Object[] ob:list){
 			us=new User((Integer)ob[0],String.valueOf(ob[1]),userName,String.valueOf(ob[3]),(Integer)ob[4],(Integer)ob[5],String.valueOf(ob[6]),sdf.format((Date)ob[7]));
 		}
-		return true;
+		return us;
 		
 	}
+	
+	/**
+	 * 通过员工账号查询数据库，判断输入的旧密码是否正确，正确返回ture,错返回false
+	 */
+	public boolean selectstaffNewpassword(String userName,String Oldpassword){
+		//true为旧密码正确，false旧密码错误
+		boolean b=false;
+		//查询旧密码SQL语句
+		String sql="select *from staff where userName=?";
+		List<Object[]> list=DBUtil.executeQuery(sql, new Object[]{userName});
+		System.out.println(userName);
+		if(list!=null&&list.size()>0&&Oldpassword.equals(list.get(0)[3])){
+			//输入的旧密码正确，返回true
+			b=true;
+		}else{
+			//输入的旧密码错误，返回false
+			b=false;
+		}
+		return b;
+	}
+	
 
 	
 }

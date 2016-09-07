@@ -8,6 +8,7 @@ import java.util.List;
 
 
 
+
 import com.web.entity.Menu;
 import com.web.entity.User;
 import com.web.util.Page;
@@ -46,6 +47,14 @@ public interface UserModel {
 	 * @return
 	 */
 	public boolean selectstaffNewpassword(String userName,String Oldpassword);
+	
+	/**
+	 * 用户管理————密码修改
+	 * @param sname
+	 * @param Oldpassword
+	 * @return
+	 */
+	public User ModifyStaff(String userName,String Newpassword);
 	
 	
 }

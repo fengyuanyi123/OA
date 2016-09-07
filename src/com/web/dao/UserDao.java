@@ -3,6 +3,7 @@ package com.web.dao;
 import java.util.List;
 
 
+
 import com.web.entity.Menu;
 import com.web.entity.User;
 
@@ -41,6 +42,15 @@ public interface UserDao {
 	 * @return
 	 */
 	public Page<OaUser> loadAllOaUser(int pageNo, int pageSize,String sname,String userName,String Persona,String state);
+	
+	
+	/**
+	 * 用户管理————密码修改
+	 * @param sname
+	 * @param Oldpassword
+	 * @return
+	 */
+	public User ModifyStaff(String userName,String Newpassword);
 	
 	
 	/**

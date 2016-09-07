@@ -8,6 +8,7 @@ import com.web.dao.UserDao;
 import com.web.dao.impl.UserDaoImpl;
 
 
+
 import com.web.entity.Menu;
 import com.web.entity.User;
 
@@ -61,4 +62,14 @@ public class UserModelmpl implements UserModel{
 		return userDao.selectstaffNewpassword(userName,Oldpassword);
 	}
 	
+	/**
+	 * 用户管理————密码修改
+	 * @param sname
+	 * @param Oldpassword
+	 * @User 员工实例化表
+	 * @return
+	 */
+	public User ModifyStaff(String userName,String Newpassword){
+		return userDao.ModifyStaff(userName,Newpassword);
+	}
 }
