@@ -69,22 +69,31 @@ public class UserDaoImpl implements UserDao{
 	 * @param pageSize
 	 * @return
 	 */
-	public Page<OaUser> loadAllOaUser(int pageNo,int pageSize){
-		String sql="select s.sid,s.sname,s.userName,s.Persona,s.state,s.department from staff s limit ?,?";
-		List<Object[]> list = DBUtil.executeQuery(sql, new Object[]{(pageNo-1)*pageSize,pageSize});
-        List<OaUser> userList = new ArrayList<OaUser>();
+	public Page<OaUser> loadAllOaUser(int pageNo, int pageSize,String sname,
+			String userName,String Persona,String state){
+		StringBuffer dsql = new StringBuffer(" where 1=1");
+		if(null != sname&&!"".equals(sname))dsql.append(" and s.sname like '%"+sname.trim()+"%'");
+		if(null != userName&&!"".equals(userName))dsql.append(" and s.userName like '%"+userName.trim()+"%'");
+		if(null != Persona&&Integer.valueOf(Persona)>0)dsql.append(" and s.Persona='"+Persona+"'");
+		if(null != state&&Integer.valueOf(state)>0)dsql.append(" and s.state='"+state+"'");
+		
+		
+		String sql="select s.sid,s.sname,s.userName,s.Persona,s.state,s.department from staff s ";
+		List<Object[]> list = DBUtil.executeQuery(sql+dsql.toString()+" limit ?,?", new Object[]{(pageNo-1)*pageSize,pageSize});
+        
+		List<OaUser> userList = new ArrayList<OaUser>();
         OaUser o = null;
        // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
        // sdf.format((Date)os[5])
         if(null!=list&&list.size()>0){
         	for(Object[] os:list){
-				o = new OaUser((Integer)os[0], String.valueOf(os[1]), String.valueOf(os[2]),1==(Integer)os[3]?"是":"否", 1==(Integer)os[4]?"正常":"异常",String.valueOf(os[5]), String.valueOf(os[6]));
+				o = new OaUser((Integer)os[0], String.valueOf(os[1]), String.valueOf(os[2]),1==(Integer)os[3]?"是":"否", 1==(Integer)os[4]?"正常":"异常",String.valueOf(os[5]));
 				userList.add(o);
 				System.out.println(o);
 			}
 		}
-		sql = "select count(*) from staff";
-		list = DBUtil.executeQuery(sql, null);
+		sql = "select count(*) from staff s";
+		list = DBUtil.executeQuery(sql+dsql, null);
         long total = (Long)list.get(0)[0];
         return new Page<OaUser>(pageNo,pageSize,userList,total);
 	}
@@ -114,8 +123,5 @@ public class UserDaoImpl implements UserDao{
 		
 	}
 
-	public Page<OaUser> searchstaff(String[] sta, int pageNo, int pageSize) {
-		// TODO Auto-generated method stub
-		return null;
-	}	
+	
 }

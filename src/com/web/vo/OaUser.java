@@ -9,17 +9,17 @@ public class OaUser implements Serializable {
 	private String persona;
 	private String state;
 	private String department;
-	private String stime;
+	
 	
 	public OaUser(int sid, String sname, String userName, String persona,
-			String state, String department, String stime) {
+			String state, String department) {
 		this.sid = sid;
 		this.sname = sname;
 		this.userName = userName;
 		this.persona = persona;
 		this.state = state;
 		this.department = department;
-		this.stime = stime;
+		
 	}
 
 	public OaUser() {}
@@ -72,13 +72,7 @@ public class OaUser implements Serializable {
 		this.department = department;
 	}
 
-	public String getStime() {
-		return stime;
-	}
-
-	public void setStime(String stime) {
-		this.stime = stime;
-	}
+	
 	
 	
 	

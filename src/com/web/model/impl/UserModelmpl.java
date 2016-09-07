@@ -46,8 +46,8 @@ public class UserModelmpl implements UserModel{
 	 * 加载所有菜单
 	 * @return
 	 */
-	public Page<OaUser> loadAllOaUser(int pageNo,int pageSize){
-		return userDao.loadAllOaUser(pageNo, pageSize);	
+	public Page<OaUser> loadAllOaUser(int pageNo, int pageSize,String sname,String userName,String Persona,String state){
+		return userDao.loadAllOaUser(pageNo, pageSize, sname, userName, Persona, state);	
 	}
 	
 	
@@ -59,16 +59,6 @@ public class UserModelmpl implements UserModel{
 	 */
 	public boolean selectstaffNewpassword(String userName,String Oldpassword){
 		return userDao.selectstaffNewpassword(userName,Oldpassword);
-	}
-	/**
-	 * 用户管理-员工组合查询
-	 * @param sta
-	 * @param pageNo
-	 * @param pageSize
-	 * @return
-	 */
-	public Page<OaUser> searchstaff(String[] sta,int pageNo, int pageSize){
-		return userDao.searchstaff(sta,pageNo,pageSize);
 	}
 	
 }

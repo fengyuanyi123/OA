@@ -18,11 +18,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="description" content="This is my page">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>easyui/themes/default/easyui.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>easyui/themes/icon.css">
-	<script type="text/javascript" src="<%=basePath%>easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="<%=basePath%>easyui/jquery-1.7.1.js"></script>
 	<script type="text/javascript" src="<%=basePath%>easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript">
     $(function(){
+    	$('#win').window('close');
         $('#dg').datagrid({
             url:'oaUser.do?methodName=oaUser&pageNo=1&pageSize=10',
             frozenColumns:[[{field:'hhhh',checkbox:true}]],
@@ -54,7 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				text:'刷新',
 				iconCls: 'icon-refresh',
 				handler: function(){
-				    refreshDate(1,10);
+				    searchstaff(1,10);
 				}
 			},'-',{
 				text:'删除',
@@ -75,23 +76,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         var pager = $('#dg').datagrid("getPager");
         pager.pagination({
             onSelectPage:function(pageNumber,pageSize){
-            	refreshDate(pageNumber,pageSize);
+            	searchstaff(pageNumber,pageSize);
             }
         });
          //添加菜单时加载父级菜单列表
-        $('#department').combobox({
-        	url:'toAddMenu.do?methodName=toAddMenu',
-        	textField:'name',
-        	valueField:'mid',
-        	value:'-1'
-        });
+        //$('#department').combobox({
+        //	url:'toAddMenu.do?methodName=toAddMenu',
+        //	textField:'name',
+        //	valueField:'mid',
+        //	value:'-1'
+       // });
     });
     /*刷新表格数据*/
-    function refreshDate(pageNo,pageSize){   	
+    function refreshDate(pageNumber,pageSize){   	
         $('#dg').datagrid('loading');
 		$.post("oaUser.do",{
 	       	methodName:'oaUser',
-	       	pageNo:pageNo,
+	       	pageNo:pageNumber,
 	       	pageSize:pageSize
     	},function(data){
 	      	$('#dg').datagrid("loadData",{
@@ -103,15 +104,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     }
    
     //组合查询
-		function searchstaff(){
-				$.post('searchstaff.do',{
-					methodName:'searchstaff',
-					pageNo:1,
-					pageSize:10,
+		function searchsStaff(pageNo,pageSize){
+				alert($("#SearchStaffAccount").val());
+				$.post('oaUser.do',{
+					methodName:'oaUser',
+					pageNo:pageNo,
+					pageSize:pageSize,
 					sname:$("#SearchStaffname").val(),
 					userName:$("#SearchStaffAccount").val(),
+					//Persona:$("#SearchStaffbumebn").combo("getValue"),
 					Persona:-1==parseInt($(":input[name='SearchStaffbumebn']").val())?null:$(":input[name='SearchStaffbumebn']").val(),
-					state:-1==parseInt($(":input[name='SearchStaffStatus']").val())?null:$(":input[name='SearchStaffStatus']").val(),
+					//state:$("#SearchStaffStatus").combo("getValue")
+					//-1==parseInt($(":input[name='SearchStaffStatus']").val())?null:$(":input[name='SearchStaffStatus']").val(),
 					},function(data){
 						$('#dg').datagrid('loading');
 						$("#dg").datagrid("loadData",{
@@ -154,7 +158,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       	  	  	  	  	</select>
       	  	  	  	  </td> 
      	  	  			 <td colspan="10" style="text-align:center;">
-      	  	  	  	     <a href="javascript:searchsStaff();" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>	 
+      	  	  	  	     <a href="javascript:void(0);"  onclick="searchsStaff(1,10);" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>	 
       	  	  	  	  </td> 
       	  	   </table>
       	  </form>

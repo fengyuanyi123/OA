@@ -37,7 +37,7 @@ public interface UserModel {
 	 * @param pageSize
 	 * @return
 	 */
-	public Page<OaUser> loadAllOaUser(int pageNo,int pageSize);
+	public Page<OaUser> loadAllOaUser(int pageNo, int pageSize,String sname,String userName,String Persona,String state);
 	
 	/**
 	 * 用户管理————密码修改
@@ -47,13 +47,6 @@ public interface UserModel {
 	 */
 	public boolean selectstaffNewpassword(String userName,String Oldpassword);
 	
-	/**
-	 * 用户管理-员工组合查询
-	 * @param sta
-	 * @param pageNo
-	 * @param pageSize
-	 * @return
-	 */
-	public Page<OaUser> searchstaff(String[] sta,int pageNo, int pageSize);
+	
 }
 

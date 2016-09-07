@@ -40,7 +40,9 @@ public class MainServlet extends HttpServlet{
 			throws ServletException, IOException {
 		//接收所有请求
 		
+		req.setCharacterEncoding("utf-8");
 		String methodName=req.getParameter("methodName");
+		System.out.println(methodName);
 		Class c=MainServlet.class;
 		try {
 			Method m=c.getMethod(methodName, HttpServletRequest.class,HttpServletResponse.class);
@@ -115,7 +117,14 @@ public class MainServlet extends HttpServlet{
 			throws ServletException, IOException {
 		int pageNo=Integer.valueOf(req.getParameter("pageNo"));
 		int pageSize=Integer.valueOf(req.getParameter("pageSize"));
-		Page<OaUser> page=userModel.loadAllOaUser(pageNo,pageSize);
+		//获取表单数据
+		String sname=req.getParameter("sname");
+		System.out.println(sname);
+		String userName=req.getParameter("userName");
+		String Persona=req.getParameter("Persona");
+		String state=req.getParameter("state");
+		
+		Page<OaUser> page=userModel.loadAllOaUser(pageNo,pageSize,sname,userName,Persona,state);
 		Map<String,Object> map=new HashMap<String, Object>();
 		map.put("rows",page.getDataList());
 		map.put("total", page.getTotal());
@@ -125,33 +134,7 @@ public class MainServlet extends HttpServlet{
 		resp.getWriter().flush();
 	}
 	
-	/**
-	 * 用户管理-员工组合查询
-	 */
-	public void searchEmployee(HttpServletRequest req, HttpServletResponse resp)
-		throws ServletException, IOException {
-		System.out.println("组合查询");
-		//获取分页数据
-		int pageNo = Integer.valueOf(req.getParameter("pageNo"));
-		int pageSize = Integer.valueOf(req.getParameter("pageSize"));
-		req.setCharacterEncoding("utf-8");
-		//获取表单数据
-		String sname=req.getParameter("sname");
-		String userName=req.getParameter("userName");
-		String Persona=req.getParameter("Persona");
-		String state=req.getParameter("state");
-		String[] sta={sname,userName,Persona,state};
-		//对搜索条件进行组合查询
-		Page<OaUser> page=userModel.searchstaff(sta,pageNo,pageSize);
-		System.out.println("返回的页面对象"+page);
-		Map<String,Object> map=new HashMap<String,Object>();
-		map.put("rows", page.getDataList());
-		map.put("total", page.getTotal());
-		resp.setCharacterEncoding("utf-8");
-		String json=JSONObject.fromObject(map).toString();
-		resp.getWriter().write(json);
-		resp.getWriter().flush();
-	}
+	
 //	public void updateEmployeePwd(HttpServletRequest req, HttpServletResponse resp)
 //			throws ServletException, IOException {
 //		//设置字符编码
