@@ -71,15 +71,15 @@ public class UserDaoImpl implements UserDao{
 	 */
 	public Page<OaUser> loadAllOaUser(int pageNo, int pageSize,String sname,
 			String userName,String Persona,String state){
-		StringBuffer dsql = new StringBuffer(" where 1=1");
-		if(null != sname&&!"".equals(sname))dsql.append(" and s.sname like '%"+sname.trim()+"%'");
-		if(null != userName&&!"".equals(userName))dsql.append(" and s.userName like '%"+userName.trim()+"%'");
-		if(null != Persona&&Integer.valueOf(Persona)>0)dsql.append(" and s.Persona='"+Persona+"'");
-		if(null != state&&Integer.valueOf(state)>0)dsql.append(" and s.state='"+state+"'");
+		StringBuffer sql = new StringBuffer(" from staff s where 1=1");
+		if(null != sname&&!"".equals(sname))sql.append(" and s.sname like '%"+sname.trim()+"%'");
+		if(null != userName&&!"".equals(userName))sql.append(" and s.userName like '%"+userName.trim()+"%'");
+		if(null != Persona&&Integer.valueOf(Persona)>0)sql.append(" and s.Persona="+Persona);
+		if(null != state&&Integer.valueOf(state)>0)sql.append(" and s.state="+state);
 		
 		
-		String sql="select s.sid,s.sname,s.userName,s.Persona,s.state,s.department from staff s ";
-		List<Object[]> list = DBUtil.executeQuery(sql+dsql.toString()+" limit ?,?", new Object[]{(pageNo-1)*pageSize,pageSize});
+		String dsql="select s.sid,s.sname,s.userName,s.Persona,s.state,s.department ";
+		List<Object[]> list = DBUtil.executeQuery(dsql+sql.toString()+" limit ?,?", new Object[]{(pageNo-1)*pageSize,pageSize});
         
 		List<OaUser> userList = new ArrayList<OaUser>();
         OaUser o = null;
@@ -89,11 +89,10 @@ public class UserDaoImpl implements UserDao{
         	for(Object[] os:list){
 				o = new OaUser((Integer)os[0], String.valueOf(os[1]), String.valueOf(os[2]),1==(Integer)os[3]?"是":"否", 1==(Integer)os[4]?"正常":"异常",String.valueOf(os[5]));
 				userList.add(o);
-				System.out.println(o);
 			}
 		}
-		sql = "select count(*) from staff s";
-		list = DBUtil.executeQuery(sql+dsql, null);
+		dsql = "select count(*) ";
+		list = DBUtil.executeQuery(dsql+sql.toString(), null);
         long total = (Long)list.get(0)[0];
         return new Page<OaUser>(pageNo,pageSize,userList,total);
 	}

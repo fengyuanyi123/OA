@@ -55,7 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				text:'刷新',
 				iconCls: 'icon-refresh',
 				handler: function(){
-				    searchstaff(1,10);
+				    searchStaff(1,10);
 				}
 			},'-',{
 				text:'删除',
@@ -64,11 +64,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				    alert('删除按钮');
 				}
 			},'-',{
-			text:'密码重置',
-			iconCls: 'icon-reload',
-			handler: function(){
-			    alert('密码重置');
-			}	
+				text:'密码重置',
+				iconCls: 'icon-reload',
+				handler: function(){
+				    alert('密码重置');
+				}	
 			}]
 		  		    
         });
@@ -76,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         var pager = $('#dg').datagrid("getPager");
         pager.pagination({
             onSelectPage:function(pageNumber,pageSize){
-            	searchstaff(pageNumber,pageSize);
+            	searchStaff(pageNumber,pageSize);
             }
         });
          //添加菜单时加载父级菜单列表
@@ -87,46 +87,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         //	value:'-1'
        // });
     });
-    /*刷新表格数据*/
-    function refreshDate(pageNumber,pageSize){   	
-        $('#dg').datagrid('loading');
-		$.post("oaUser.do",{
-	       	methodName:'oaUser',
-	       	pageNo:pageNumber,
-	       	pageSize:pageSize
-    	},function(data){
-	      	$('#dg').datagrid("loadData",{
-	             rows:data.rows,
-	             total:data.total
-	      	});
-	     	$('#dg').datagrid('loaded');
-    	},"json");
-    }
    
     //组合查询
-		function searchsStaff(pageNo,pageSize){
-				alert($("#SearchStaffAccount").val());
-				$.post('oaUser.do',{
-					methodName:'oaUser',
-					pageNo:pageNo,
-					pageSize:pageSize,
-					sname:$("#SearchStaffname").val(),
-					userName:$("#SearchStaffAccount").val(),
-					//Persona:$("#SearchStaffbumebn").combo("getValue"),
-					Persona:-1==parseInt($(":input[name='SearchStaffbumebn']").val())?null:$(":input[name='SearchStaffbumebn']").val(),
-					//state:$("#SearchStaffStatus").combo("getValue")
-					//-1==parseInt($(":input[name='SearchStaffStatus']").val())?null:$(":input[name='SearchStaffStatus']").val(),
-					},function(data){
-						$('#dg').datagrid('loading');
-						$("#dg").datagrid("loadData",{
-							rows:data.rows,
-							total:data.total
-						});
-						$('#dg').datagrid('loaded');
+	function searchStaff(pageNo,pageSize){
+		$.post('oaUser.do',{
+			methodName:'oaUser',
+			pageNo:pageNo,
+			pageSize:pageSize,
+			sname:$("#SearchStaffname").val(),
+			userName:$("#SearchStaffAccount").val(),
+			Persona:$("#SearchStaffbumebn").val(),//.combo("getValue"),
+			state:$("#SearchStaffStatus").val()//.combo("getValue")
+		},function(data){
+			$('#dg').datagrid('loading');
+			$("#dg").datagrid("loadData",{
+				rows:data.rows,
+				total:data.total
+			});
+			$('#dg').datagrid('loaded');
 
-						},'json');
-					
-			}
+		},'json');
+	}
+	//重置搜索条件
+	function searchsStaffReset(){
+		//$("#searchForm")[0].reset();
+		$("#searchForm").form("reset");
+	}
     </script>
 
   </head>
@@ -140,13 +126,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       	  	  	  	  <td><input type="text" id="SearchStaffname" style="width:150px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
       	  	  	  	  <td><label>账号：</label></td>
       	  	  	  	  <td><input type="text" id="SearchStaffAccount" style="width:150px;"/></td>
-      	  	  	  	  <tr></tr>
+      	  	  	  	  <td></td>
+      	  	  	  </tr>
+      	  	  	  <tr>
       	  	  	  	  <td><label>部门负责人：</label></td>
       	  	  	  	  <td>
       	  	  	  	  	<select id="SearchStaffbumebn" style="width:150px;">
       	  	  	  	  		<option value="-1">全部</option>
       	  	  	  	  		<option value="1">是</option>
-      	  	  	  	  		<option value="0">否</option>
+      	  	  	  	  		<option value="2">否</option>
       	  	  	  	  	</select>
       	  	  	  	  </td>
       	  	  	  	  <td><label>状态：</label></td>
@@ -154,12 +142,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       	  	  	  	  	<select id="SearchStaffStatus" style="width:150px;">
       	  	  	  	  		<option value="-1">全部</option>
       	  	  	  	  		<option value="1">正常</option>
-      	  	  	  	  		<option value="0">异常</option>
+      	  	  	  	  		<option value="2">异常</option>
       	  	  	  	  	</select>
       	  	  	  	  </td> 
-     	  	  			 <td colspan="10" style="text-align:center;">
-      	  	  	  	     <a href="javascript:void(0);"  onclick="searchsStaff(1,10);" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>	 
+     	  	  		  <td style="text-align:center;">
+      	  	  	  	     <a href="javascript:void(0);"  onclick="searchStaff(1,10);" class="easyui-linkbutton" data-options="iconCls:'icon-search'">搜索</a>	 
+      	  	  	  	     <a href="javascript:void(0);"  onclick="searchsStaffReset();" class="easyui-linkbutton" data-options="iconCls:'icon-search'">重置</a>	 
       	  	  	  	  </td> 
+      	  	  	  </tr>
       	  	   </table>
       	  </form>
       </div>
