@@ -2,14 +2,24 @@ package com.web.entity;
 
 import java.io.Serializable;
 
-
+/**
+ * 菜单列表权限实例化表
+ * @author Administrator
+ *
+ */
 
 public class Menu implements Serializable{
+	//编号
 	private int mid;
+	//菜单列表
 	private String name;
+	//地址
     private String url;
+    //是否展现
     private int issshow;
+    //等级
     private int level;
+    //父级菜单
     private int parentid;
     
     

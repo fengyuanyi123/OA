@@ -17,12 +17,14 @@ import net.sf.json.JSONObject;
 
 
 import com.web.entity.Menu;
+import com.web.entity.Role;
 import com.web.entity.User;
 import com.web.model.UserModel;
 import com.web.model.impl.UserModelmpl;
 import com.web.util.Page;
 
 import com.web.vo.OaUser;
+import com.web.vo.Rolevo;
 
 
 
@@ -38,10 +40,10 @@ public class MainServlet extends HttpServlet{
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		//接收所有请求
-		
+	
 		req.setCharacterEncoding("utf-8");
 		String methodName=req.getParameter("methodName");
+		//接收所有请求
 		System.out.println(methodName);
 		Class c=MainServlet.class;
 		try {
@@ -134,7 +136,13 @@ public class MainServlet extends HttpServlet{
 		resp.getWriter().flush();
 	}
 	
-	
+	/**
+	 * 角色管理--密码修改
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void psswordModifiCation(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		//设置字符编码
@@ -184,6 +192,93 @@ public class MainServlet extends HttpServlet{
 		resp.getWriter().flush();
 		
 	}
+	
+	/**
+	 * 权限管理——角色管理
+	 * oaRole 
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void oaRole(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		int pageNo = Integer.valueOf(req.getParameter("pageNo"));
+		int pageSize = Integer.valueOf(req.getParameter("pageSize"));
+		Page<Rolevo> page = userModel.loadAllOaRole(pageNo,pageSize);
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("rows",page.getDataList());
+		map.put("total", page.getTotal());
+		String json=JSONObject.fromObject(map).toString();
+		resp.setCharacterEncoding("utf-8");
+		resp.getWriter().write(json);
+		resp.getWriter().flush();
+	}
+	
+    /**
+     * 权限管理--角色管理--添加角色
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+	public void addRole(HttpServletRequest req, HttpServletResponse resp)
+		throws ServletException, IOException {
+		System.out.println("添加角色");
+		req.setCharacterEncoding("utf-8");
+		//获取表单数据
+		String dname=req.getParameter("dname");
+		String state=req.getParameter("state");
+		String explains=req.getParameter("explains");
+		String[] roles={dname,state,explains};
+		//根据结果返回信息
+		int result=0;
+		if(userModel.addRole(roles)){
+			//添加成功
+			result=1;
+		}
+		System.out.println(result+"");
+		resp.setCharacterEncoding("utf-8");
+		resp.getWriter().write(result+"");
+		resp.getWriter().flush();
+		
+		
+	}
+	/**
+	 * 权限管理--角色管理--删除角色
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	
+	public void deleteRole(HttpServletRequest req, HttpServletResponse resp)
+	throws ServletException, IOException {
+		System.out.println("角色删除");
+		req.setCharacterEncoding("utf-8");
+		//获取删除用户的登录名数据
+		String roleName=req.getParameter("roleName");
+		System.out.println(roleName);
+		String[] roleNames=roleName.split(",");
+		int result=0;
+		String deleteFail=userModel.deleteRole(roleNames);
+		System.out.println("角色删除"+deleteFail);
+		//用户删除
+		if(deleteFail==""){
+			//全部删除
+			result=1;
+		}else{
+			//删除失败
+			result=0;
+		}
+		
+		//此处有问题待解决
+		resp.setCharacterEncoding("utf-8");
+		resp.getWriter().write(result+"");
+		resp.getWriter().flush();
+		
+	}
+	
 	
 }
 

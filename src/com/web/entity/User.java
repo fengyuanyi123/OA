@@ -1,7 +1,11 @@
 package com.web.entity;
 
 import java.io.Serializable;
-
+/**
+ * 角色菜单实例化表
+ * @author Administrator
+ *
+ */
 public class User implements Serializable{
 	//编号
 	private int sid;
@@ -45,7 +49,7 @@ public class User implements Serializable{
 		this.department = department;
 		this.stime = stime;
 	}
-
+    //get和set封装方法
 	public int getSid() {
 		return sid;
 	}

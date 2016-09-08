@@ -10,11 +10,13 @@ import com.web.dao.impl.UserDaoImpl;
 
 
 import com.web.entity.Menu;
+import com.web.entity.Role;
 import com.web.entity.User;
 
 import com.web.model.UserModel;
 import com.web.util.Page;
 import com.web.vo.OaUser;
+import com.web.vo.Rolevo;
 
 
 
@@ -54,6 +56,7 @@ public class UserModelmpl implements UserModel{
 	
 	/**
 	 * 用户管理————密码修改
+	 * 通过员工账号查询数据库，判断输入的旧密码是否正确，正确返回true,错返回false
 	 * @param sname
 	 * @param Oldpassword
 	 * @return
@@ -64,12 +67,42 @@ public class UserModelmpl implements UserModel{
 	
 	/**
 	 * 用户管理————密码修改
+	 * @User 员工实例化表
+	 * 通过员工账号查询数据库，将旧密码改成新密码，返回Employee对象
 	 * @param sname
 	 * @param Oldpassword
-	 * @User 员工实例化表
 	 * @return
 	 */
 	public User ModifyStaff(String userName,String Newpassword){
 		return userDao.ModifyStaff(userName,Newpassword);
 	}
+	
+	
+	/**
+	 * 权限管理——角色管理
+	 * Rolevo 角色实例化表
+	 * @return
+	 */
+	public Page<Rolevo> loadAllOaRole(int pageNo,int pageSize){
+		return userDao.loadAllOaRole(pageNo,pageSize);
+	}
+	
+	/**
+	 * 权限管理——角色管理——添加角色
+	 * @param names
+	 * @return
+	 */
+	public boolean addRole(String[] roles){
+		return userDao.addRole(roles);
+	}
+	
+	/**
+	 * 权限管理——角色管理——删除角色
+	 * @param names
+	 * @return
+	 */
+	public String deleteRole(String[] roleNames){
+		return userDao.deleteRole(roleNames);
+	}
+	
 }

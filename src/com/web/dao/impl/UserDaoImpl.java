@@ -8,13 +8,17 @@ import java.util.List;
 
 
 
+
+
 import com.web.dao.UserDao;
 import com.web.entity.Menu;
+import com.web.entity.Role;
 import com.web.entity.User;
 
 import com.web.util.DBUtil;
 import com.web.util.Page;
 import com.web.vo.OaUser;
+import com.web.vo.Rolevo;
 
 
 
@@ -100,6 +104,8 @@ public class UserDaoImpl implements UserDao{
 	
 	/**
 	 * 用户管理————密码修改
+	 * @User 员工实例化表
+	 * 通过员工账号查询数据库，将旧密码改成新密码，返回Employee对象
 	 * @param sname
 	 * @param Oldpassword
 	 * @return
@@ -124,7 +130,11 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	/**
-	 * 通过员工账号查询数据库，判断输入的旧密码是否正确，正确返回ture,错返回false
+	 * 用户管理————密码修改
+	 * 通过员工账号查询数据库，判断输入的旧密码是否正确，正确返回true,错返回false
+	 * @param sname
+	 * @param Oldpassword
+	 * @return
 	 */
 	public boolean selectstaffNewpassword(String userName,String Oldpassword){
 		//true为旧密码正确，false旧密码错误
@@ -143,6 +153,85 @@ public class UserDaoImpl implements UserDao{
 		return b;
 	}
 	
-
+	/**
+	 * 权限管理——角色管理
+	 * Rolevo 角色实例化表
+	 * @return
+	 */
+	public Page<Rolevo> loadAllOaRole(int pageNo,int pageSize){
+		//查询数据库
+		String sql = "select d.did,d.dname,d.state,d.explains from department d limit ?,? ";
+		List<Object[]> list = DBUtil.executeQuery(sql, new Object[]{(pageNo-1)*pageSize,pageSize});
+		List<Rolevo> roleList = new ArrayList<Rolevo>();
+		Rolevo r = null;
+		if(null != list&&list.size()>0){
+			for(Object[] os:list){
+				r = new Rolevo((Integer)os[0],String.valueOf(os[1]),1==(Integer)os[2]?"使用":"停用",String.valueOf(os[3]));
+				roleList.add(r);
+			}
+		}
+		//查询返回行数
+		sql = "select count(*) from department";
+		list = DBUtil.executeQuery(sql, null);
+        long total = (Long)list.get(0)[0];
+        return new Page<Rolevo>(pageNo,pageSize,roleList,total);	
+	}
+	
+	/**
+	 * 权限管理——角色管理——添加角色
+	 * @param names
+	 * @return
+	 */
+	public boolean addRole(String[] roles){
+		//判断是否添加成功，true为添加成功，否则反之
+		boolean b=false;
+		//先查询数据库中是否已有此角色名称
+		String existsData="select *from department where dname=?";
+		List<Object[]> lists=DBUtil.executeQuery(existsData, new Object[]{roles[0]});
+		if(lists.size()>0){
+			//数据库已存在角色名称
+			return b=false;
+		}else{
+			String sql="insert into department(dname,state,explains) values(?,?,?)";
+			//添加用户
+			DBUtil.executeDML(sql, new Object[]{String.valueOf(roles[0]),String.valueOf(roles[1]),String.valueOf(roles[2])});
+		}
+		//查询添加用户语句
+		String sql="select *from department where dname=?";
+		List<Object[]> list=DBUtil.executeQuery(sql, new Object[]{roles[1]});
+		if(list.size()>0&&null!=list){
+			//添加成功
+			b=true;
+		}
+		
+		return b;
+		
+		
+	}
+	
+	/**
+	 * 权限管理——角色管理——删除角色
+	 * @param names
+	 * @return
+	 */
+	public String deleteRole(String[] roleNames){
+		//执行删除角色SQL语句
+		String sql="delete from department where dname=?";
+		//遍历数组，删除数据库内的用户
+		for(String roleName : roleNames){
+			DBUtil.executeDML(sql, new Object[]{roleName});
+		}
+		//再次查询数据库是否存在已删除用户
+		sql="select * from department where dname=? ";
+		String deleteFail="";
+		for(String roleName : roleNames){
+			List<Object[]> list=DBUtil.executeQuery(sql,  new Object[]{roleName});
+			if(list.size()>0){
+				//记录删除失败的用户
+				deleteFail+=String.valueOf(list.get(0)[1])+",";
+			}
+		}
+		return deleteFail;
+	}
 	
 }
