@@ -12,7 +12,6 @@ import java.util.List;
 
 import com.web.dao.UserDao;
 import com.web.entity.Menu;
-import com.web.entity.Role;
 import com.web.entity.User;
 
 import com.web.util.DBUtil;
@@ -180,31 +179,22 @@ public class UserDaoImpl implements UserDao{
 	/**
 	 * 权限管理——角色管理——添加角色
 	 * @param names
-	 * @return
+	 * @return true为添加成功，否则反之
 	 */
 	public boolean addRole(String[] roles){
-		//判断是否添加成功，true为添加成功，否则反之
-		boolean b=false;
 		//先查询数据库中是否已有此角色名称
-		String existsData="select *from department where dname=?";
+		String existsData="select * from department where dname=?";
 		List<Object[]> lists=DBUtil.executeQuery(existsData, new Object[]{roles[0]});
 		if(lists.size()>0){
 			//数据库已存在角色名称
-			return b=false;
+			return false;
 		}else{
 			String sql="insert into department(dname,state,explains) values(?,?,?)";
 			//添加用户
 			DBUtil.executeDML(sql, new Object[]{String.valueOf(roles[0]),String.valueOf(roles[1]),String.valueOf(roles[2])});
-		}
-		//查询添加用户语句
-		String sql="select *from department where dname=?";
-		List<Object[]> list=DBUtil.executeQuery(sql, new Object[]{roles[1]});
-		if(list.size()>0&&null!=list){
-			//添加成功
-			b=true;
+			return true;
 		}
 		
-		return b;
 		
 		
 	}

@@ -36,7 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        {field:'userName',title:'登录名',width:100,align:'center'},   
 		        {field:'persona',title:'部门负责人   是:否',width:300,align:'center'}, 
 		        {field:'state',title:'在线状态',width:100,align:'center'}, 
-		        {field:'department',title:'部门',width:100,align:'center'}, 
+		        {field:'department',title:'部门',width:100,align:'center'}
 		           
   		    ]],
   		    toolbar: [{

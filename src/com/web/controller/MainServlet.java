@@ -17,7 +17,6 @@ import net.sf.json.JSONObject;
 
 
 import com.web.entity.Menu;
-import com.web.entity.Role;
 import com.web.entity.User;
 import com.web.model.UserModel;
 import com.web.model.impl.UserModelmpl;
@@ -227,6 +226,7 @@ public class MainServlet extends HttpServlet{
 		System.out.println("添加角色");
 		req.setCharacterEncoding("utf-8");
 		//获取表单数据
+		
 		String dname=req.getParameter("dname");
 		String state=req.getParameter("state");
 		String explains=req.getParameter("explains");
@@ -253,7 +253,7 @@ public class MainServlet extends HttpServlet{
 	 */
 	
 	public void deleteRole(HttpServletRequest req, HttpServletResponse resp)
-	throws ServletException, IOException {
+			throws ServletException, IOException {
 		System.out.println("角色删除");
 		req.setCharacterEncoding("utf-8");
 		//获取删除用户的登录名数据
